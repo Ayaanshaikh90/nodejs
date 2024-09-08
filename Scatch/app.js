@@ -1,16 +1,24 @@
+// const upload = require('./config/multer')
 const express = require('express')
+const path = require("path")
+const userModel = require('./models/userModel')
+const cookieParser = require('cookie-parser')
+const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const path = require('path')
-const upload = require('./config/multerconfig')
-
+const db = require('./config/db')
+const usersRouter = require('./routes/usersRouter')
+const ownersRouter = require('./routes/ownersRouter')
+const productsRouter = require('./routes/productsRouter')
 const app = express()
 
+app.use(express.json())
+app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser())
 app.set('view engine', 'ejs')
 
-
-app.get('/', (req, res) => {
-    res.send('hii ')
-})
-
+app.use('/users', ownersRouter)
+app.use('/owners', usersRouter)
+app.use('/products', productsRouter)
 
 app.listen(3000)
